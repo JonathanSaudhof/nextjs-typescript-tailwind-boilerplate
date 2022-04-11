@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import fetcher from "@lib/fetcher";
 import { extractIdFromUrl, prefetcher } from "@lib/helper";
-import { prefetchFilms } from "@hooks/useFilmDetails";
 const ITEMS_PER_PAGE = 10;
 
 export interface CharacterRawDetails {
@@ -23,21 +22,32 @@ export interface CharacterRawDetails {
   vehicles: string[];
 }
 
-export type SwapiPeopleReturn = {
+export type CharcerRawList = {
   count: number;
   next: string;
   previous: string | null;
   results: CharacterRawDetails[];
 };
 
+interface CharcterDetails {
+  id: number;
+  name: string;
+  gender: string;
+  species: string[];
+  birthYear: string;
+  eyeColor: string;
+  films: number[];
+  url: string;
+}
+
 export default function useCharacterList(page: number): {
-  characterList: CharacterRawDetails[] | [];
+  characterList: CharcterDetails[] | [];
   currentPage: number;
   pages: number | null;
   isLoading: boolean;
   isError: Error;
 } {
-  const { data, error } = useSWR<SwapiPeopleReturn | undefined>(
+  const { data, error } = useSWR<CharcerRawList | undefined>(
     `https://swapi.dev/api/people/?page=${page}`,
     fetcher,
   );
@@ -75,23 +85,12 @@ export default function useCharacterList(page: number): {
  */
 function extractCharacterListItemInformation(
   characterRawList: CharacterRawDetails[],
-): {
-  id: number;
-  name: string;
-  gender: string;
-  species: string[];
-  birthYear: string;
-  eyeColor: string;
-  films: number[];
-}[] {
-  // TODO: Add more
+): CharcterDetails[] {
   return characterRawList.map((character) => {
-    // get ID from URL
     const id = extractIdFromUrl(character.url);
 
     const films = character.films.map((film) => {
       const id = extractIdFromUrl(film);
-      prefetchFilms(id);
 
       return id;
     });
@@ -104,11 +103,12 @@ function extractCharacterListItemInformation(
       birthYear: character.birth_year,
       eyeColor: character.eye_color,
       films,
+      url: character.url,
     };
   });
 }
 
-export function prefetchCharacterList(page: number) {
+export async function prefetchCharacterList(page: number) {
   const url = `https://swapi.dev/api/people/?page=${page}`;
   prefetcher(url);
 }
