@@ -1,9 +1,10 @@
 import useSWR from "swr";
-
+import fetcher from "@lib/fetcher";
+import { extractIdFromUrl, prefetcher } from "@lib/helper";
+import { prefetchFilms } from "@hooks/useFilmDetails";
 const ITEMS_PER_PAGE = 10;
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export type CharacterRawListItem = {
+export interface CharacterRawDetails {
   birth_year: string;
   created: string;
   edited: string;
@@ -20,17 +21,17 @@ export type CharacterRawListItem = {
   starships: string[];
   url: string;
   vehicles: string[];
-};
+}
 
 export type SwapiPeopleReturn = {
   count: number;
   next: string;
   previous: string | null;
-  results: CharacterRawListItem[];
+  results: CharacterRawDetails[];
 };
 
 export default function useCharacterList(page: number): {
-  characterList: CharacterRawListItem[] | [];
+  characterList: CharacterRawDetails[] | [];
   currentPage: number;
   pages: number | null;
   isLoading: boolean;
@@ -45,10 +46,10 @@ export default function useCharacterList(page: number): {
   let characterList: any[] = [];
 
   if (data) {
-    const { count, results } = data;
-
+    const { count, results: characterRawList } = data;
     numberOfPages = Math.round(+count / ITEMS_PER_PAGE);
-    characterList = results;
+    characterList = extractCharacterListItemInformation(characterRawList);
+
     return {
       characterList,
       currentPage: page,
@@ -72,22 +73,42 @@ export default function useCharacterList(page: number): {
  * @description Get a subset of data from the raw characters list retruned from the api
  * to be shown in the list view
  */
-// function extractCharacterListInformation(
-//   characterRawList: CharacterRawListItem[],
-// ): {
-//   id: string;
-//   name: string;
-// }[] {
-//   // TODO: Add more
-//   return characterRawList.map((character) => {
-//     // get ID from URL
-//     const urlPathname = new URL(character.url).pathname;
-//     const pathItems = urlPathname.split("/").filter((item) => item !== "");
-//     const id = pathItems.slice(-1)[0];
+function extractCharacterListItemInformation(
+  characterRawList: CharacterRawDetails[],
+): {
+  id: number;
+  name: string;
+  gender: string;
+  species: string[];
+  birthYear: string;
+  eyeColor: string;
+  films: number[];
+}[] {
+  // TODO: Add more
+  return characterRawList.map((character) => {
+    // get ID from URL
+    const id = extractIdFromUrl(character.url);
 
-//     return {
-//       id,
-//       name: character.name,
-//     };
-//   });
-// }
+    const films = character.films.map((film) => {
+      const id = extractIdFromUrl(film);
+      prefetchFilms(id);
+
+      return id;
+    });
+
+    return {
+      id,
+      name: character.name,
+      gender: character.gender,
+      species: character.species,
+      birthYear: character.birth_year,
+      eyeColor: character.eye_color,
+      films,
+    };
+  });
+}
+
+export function prefetchCharacterList(page: number) {
+  const url = `https://swapi.dev/api/people/?page=${page}`;
+  prefetcher(url);
+}
