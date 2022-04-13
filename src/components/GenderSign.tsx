@@ -13,6 +13,7 @@ export function GenderSign({ gender = "unknown" }: GenderSignProps) {
     female: <BsGenderFemale />,
     male: <BsGenderMale />,
     "n/a": <CgUnavailable />,
+    none: <CgUnavailable />,
     unknown: <FaGenderless />,
     hermaphrodite: <BsGenderTrans />,
   };
