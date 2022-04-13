@@ -1,6 +1,6 @@
 import useSWR from "swr";
-import fetcher from "@lib/fetcher";
-import { extractIdFromUrl, prefetcher } from "@lib/helper";
+import fetcher from "@/lib/fetcher";
+import { extractIdFromUrl, prefetcher } from "@/lib/helper";
 const ITEMS_PER_PAGE = 10;
 
 export interface CharacterRawDetails {
@@ -40,15 +40,15 @@ interface CharcterDetails {
   url: string;
 }
 
-export default function useCharacterList(page: number): {
+// TODO: return type into interface
+export function useCharacterList(page: number): {
   characterList: CharcterDetails[] | [];
-  currentPage: number;
   pages: number | null;
   isLoading: boolean;
   isError: Error;
 } {
   const { data, error } = useSWR<CharcerRawList | undefined>(
-    `https://swapi.dev/api/people/?page=${page}`,
+    page ? `https://swapi.dev/api/people/?page=${page}` : null,
     fetcher,
   );
 
@@ -62,7 +62,6 @@ export default function useCharacterList(page: number): {
 
     return {
       characterList,
-      currentPage: page,
       pages: numberOfPages,
       isLoading: false,
       isError: error,
@@ -71,7 +70,6 @@ export default function useCharacterList(page: number): {
 
   return {
     characterList: [],
-    currentPage: page,
     pages: numberOfPages,
     isLoading: true,
     isError: error,

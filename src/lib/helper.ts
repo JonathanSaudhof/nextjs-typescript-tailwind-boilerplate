@@ -1,5 +1,5 @@
 import { mutate } from "swr";
-import fetcher from "@lib/fetcher";
+import fetcher from "@/lib/fetcher";
 
 export function extractIdFromUrl(url: string) {
   const urlPathname = new URL(url).pathname;

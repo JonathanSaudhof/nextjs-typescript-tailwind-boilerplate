@@ -1,6 +1,6 @@
 import useSWR from "swr";
-import fetcher from "@src/lib/fetcher";
-import { extractIdFromUrl } from "@lib/helper";
+import fetcher from "@/src/lib/fetcher";
+import { extractIdFromUrl } from "@/lib/helper";
 
 interface FilmRawDetails {
   episode_id: string;
@@ -32,7 +32,6 @@ interface FilmDetails {
   openingCrawl: string;
   director: string;
   producer: string;
-  characters: number[];
   releaseDate: string;
 }
 
@@ -40,7 +39,7 @@ interface FilmMap {
   [id: number]: FilmDetails;
 }
 
-export default function useFilmMap(): {
+export function useFilmMap(): {
   filmMap: FilmMap | null;
   isLoading: boolean;
   isError: Error;
@@ -57,9 +56,6 @@ export default function useFilmMap(): {
 
     for (const film of filmRawList) {
       const id = extractIdFromUrl(film.url);
-      const characters = film.characters.map((character) =>
-        extractIdFromUrl(character),
-      );
 
       filmMap[id] = {
         title: film.title,
@@ -67,7 +63,6 @@ export default function useFilmMap(): {
         openingCrawl: film.opening_crawl,
         director: film.director,
         producer: film.producer,
-        characters,
         releaseDate: film.release_date,
       };
     }
@@ -81,7 +76,7 @@ export default function useFilmMap(): {
 
   return {
     filmMap: null,
-    isLoading: true,
+    isLoading: false,
     isError: error,
   };
 }

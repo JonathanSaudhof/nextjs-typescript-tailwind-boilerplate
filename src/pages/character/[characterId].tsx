@@ -1,17 +1,16 @@
-import { Loading } from "@components/Loading";
-import useCharacterDetails from "@hooks/useCharacterDetails";
-import useFilmMap from "@src/hooks/useFilmMap";
+import { Loading } from "@/components/Loading";
+import { useCharacterDetails } from "@/hooks/useCharacterDetails";
+import { useFilmMap } from "@/hooks/useFilmMap";
 import { useRouter } from "next/router";
 
 const CharacterDetails = () => {
   const router = useRouter();
-  const characterId = router.query.characterId as string;
-
+  const characterId = parseInt(router.query.characterId as string) || null;
   const {
     characterDetails,
     isLoading: characterDetailsIsLoading,
     isError: characterDetailsIsError,
-  } = useCharacterDetails(+characterId);
+  } = useCharacterDetails(characterId);
 
   const {
     filmMap,

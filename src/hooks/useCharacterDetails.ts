@@ -1,8 +1,8 @@
 import useSWR from "swr";
-import fetcher from "@lib/fetcher";
+import fetcher from "@/lib/fetcher";
 import { CharacterRawDetails } from "./useCharacterList";
-import { extractIdFromUrl } from "@lib/helper";
-import { CustomError } from "@src/lib/customError";
+import { extractIdFromUrl } from "@/lib/helper";
+import { CustomError } from "@/lib/customError";
 
 interface CharacterDetails {
   name: string;
@@ -14,13 +14,13 @@ interface CharacterDetails {
   species: string[];
 }
 
-export default function useCharacterDetails(id: number): {
+export function useCharacterDetails(id: number | null): {
   characterDetails: CharacterDetails | null;
   isLoading: boolean;
   isError: CustomError;
 } {
   const { data, error } = useSWR<CharacterRawDetails>(
-    id != null ? `https://swapi.dev/api/people/${id}` : null,
+    id ? `https://swapi.dev/api/people/${id}` : null,
     fetcher,
   );
 

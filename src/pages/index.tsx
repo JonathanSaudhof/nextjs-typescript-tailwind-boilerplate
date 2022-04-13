@@ -1,17 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
-import useCharacterList from "@hooks/useCharacterList";
-import { prefetchCharacterList } from "@hooks/useCharacterList";
-import useFilmMap from "@src/hooks/useFilmMap";
-import { Loading } from "@components/Loading";
+import { useCharacterList } from "@/hooks/useCharacterList";
+import { prefetchCharacterList } from "@/hooks/useCharacterList";
+import { useFilmMap } from "@/src/hooks/useFilmMap";
+import { Loading } from "@/components/Loading";
 
 const Home = () => {
   const router = useRouter();
   // sets page by default to 1
-  const page = router.query.page ? parseInt(router.query.page as string) : 1;
+  const page = parseInt(router.query.page as string) || 1;
   const { cache } = useSWRConfig();
-
   const {
     characterList,
     pages,
@@ -72,6 +71,7 @@ const Home = () => {
             </li>
           ))}
       </ul>
+
       {/* PAGE NAVIGATION */}
       {pages && (
         <ul className='fixed bottom-0 flex gap-6 py-6 bg-gray-800 w-full'>
