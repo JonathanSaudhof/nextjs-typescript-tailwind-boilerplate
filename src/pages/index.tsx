@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useSWRConfig } from "swr";
 import useCharacterList from "@hooks/useCharacterList";
 import { prefetchCharacterList } from "@hooks/useCharacterList";
@@ -9,9 +8,8 @@ import { Loading } from "@components/Loading";
 
 const Home = () => {
   const router = useRouter();
-  const { page } = router.query;
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
+  // sets page by default to 1
+  const page = router.query.page ? parseInt(router.query.page as string) : 1;
   const { cache } = useSWRConfig();
 
   const {
@@ -19,7 +17,7 @@ const Home = () => {
     pages,
     isLoading: charactersIsLoading,
     isError: charactersIsError,
-  } = useCharacterList(currentPage);
+  } = useCharacterList(+page);
 
   const {
     filmMap,
@@ -27,20 +25,15 @@ const Home = () => {
     isError: filmsIsError,
   } = useFilmMap();
 
-  useEffect(() => {
-    if (!page) {
-      router.push("/?page=1");
-    } else {
-      setCurrentPage(+page);
-    }
-  }, [page, router]);
-
-  // TODO: make better
   function handleMouseEnter(page: number) {
     const url = `https://swapi.dev/api/people/?page=${page}`;
     if (cache.get(url) === undefined) {
       prefetchCharacterList(page);
     }
+  }
+
+  if (charactersIsError || filmsIsError) {
+    // TODO: specify behavior
   }
 
   if (charactersIsLoading || filmsIsLoading) {
@@ -57,7 +50,7 @@ const Home = () => {
               key={character.url}
               className='flex flex-col shadow-md bg-gray-500 border rounded'
             >
-              <Link href='/character/1'>
+              <Link href={`/character/${character.id}`}>
                 <a>{character.name}</a>
               </Link>
               <div>{character.gender}</div>
@@ -79,16 +72,16 @@ const Home = () => {
             </li>
           ))}
       </ul>
-      {/* NAVIGATION */}
+      {/* PAGE NAVIGATION */}
       {pages && (
         <ul className='fixed bottom-0 flex gap-6 py-6 bg-gray-800 w-full'>
-          Seite
+          Pages
           {Array.apply(null, Array(pages)).map((_, index) => (
             <li key={index} className='text-white'>
               <Link href={`/?page=${index + 1}`}>
                 <a
                   className={`p-2 ${
-                    currentPage == index + 1 ? "text-white bg-gray-300" : ""
+                    page === index + 1 ? "text-white bg-gray-300" : ""
                   }`}
                   onMouseEnter={handleMouseEnter.bind(null, index + 1)}
                 >{`${index + 1}`}</a>
