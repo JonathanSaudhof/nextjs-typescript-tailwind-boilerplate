@@ -30,18 +30,18 @@ const CharacterDetails = () => {
     <div className='container mx-auto'>
       <div className='shadow-lg overflow-hidden sm:rounded-md'>
         <div className='px-4 py-6 sm:px-6 bg-gray-700 flex gap-6 items-center'>
-          <div className='absolute h-10 w-10 flex justify-center items-center rounded-full bg-gray-800 hover:cursor-pointer'>
-            <BiChevronLeft
-              className='text-2xl font-medium'
-              onClick={() => router.back()}
-            />
+          <div
+            className='absolute h-10 w-10 flex justify-center items-center rounded-full bg-gray-800 hover:cursor-pointer'
+            onClick={() => router.back()}
+          >
+            <BiChevronLeft className='text-2xl font-medium' />
           </div>
           <h1 className='ml-14 text-lg leading-6 font-medium  text-gray-50'>
             {characterDetails?.name}
           </h1>
         </div>
-        <div className='bg-gray-50  border-t border-gray-200 px-4 py-6 sm:p-0'>
-          <dl className='sm:divide-y sm:divide-gray-200'>
+        <div className='bg-gray-200  border-t border-gray-400 px-4 py-6 sm:p-0'>
+          <dl className='sm:divide-y sm:divide-gray-400'>
             <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
               <dt className='font-medium text-gray-900'>Gender</dt>
               <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2 flex items-baseline gap-6'>
@@ -68,7 +68,7 @@ const CharacterDetails = () => {
               <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2'>
                 <ul
                   role='list'
-                  className='border border-gray-200 rounded-md divide-y divide-gray-200'
+                  className='border border-gray-400 rounded-md divide-y divide-gray-400'
                 >
                   {filmMap &&
                     characterDetails?.films.map((film) => {

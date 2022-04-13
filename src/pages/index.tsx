@@ -6,8 +6,8 @@ import { prefetchCharacterList } from "@/hooks/useCharacterList";
 import { useFilmMap } from "@/src/hooks/useFilmMap";
 import { Loading } from "@/components/Loading";
 import { GenderSign } from "../components/GenderSign";
-import { Table } from "../components/Table/Table";
 import { TableCell } from "../components/Table/TableCell";
+import { prefetchCharacterDetails } from "../hooks/useCharacterDetails";
 
 const Home = () => {
   const router = useRouter();
@@ -27,10 +27,17 @@ const Home = () => {
     isError: filmsIsError,
   } = useFilmMap();
 
-  function handleMouseEnter(page: number) {
+  function handleMouseEnterPageLink(page: number) {
     const url = `https://swapi.dev/api/people/?page=${page}`;
     if (cache.get(url) === undefined) {
       prefetchCharacterList(page);
+    }
+  }
+
+  function handleMouseEnterDetailLink(id: number) {
+    const url = `https://swapi.dev/api/people/${id}`;
+    if (cache.get(url) === undefined) {
+      prefetchCharacterDetails(id);
     }
   }
 
@@ -45,7 +52,7 @@ const Home = () => {
   return (
     <div className='container mx-auto'>
       {/* LIST */}
-      <Table>
+      <table className='table-auto min-w-full divide-y divide-gray-300 border-transparent rounded-md overflow-hidden shadow'>
         <thead className='bg-gray-700 text-left'>
           <tr>
             <TableCell asHead>Name</TableCell>
@@ -53,12 +60,19 @@ const Home = () => {
             <TableCell asHead>Episodes</TableCell>
           </tr>
         </thead>
-        <tbody className='divide-y divide-gray-200 bg-gray-50'>
+        <tbody className='divide-y divide-gray-400 bg-gray-200'>
           {characterList.map((character) => (
             <tr key={character.id} className='py-4'>
               <TableCell className='w-1/5 underline'>
                 <Link href={`/character/${character.id}`}>
-                  <a>{character.name}</a>
+                  <a
+                    onMouseEnter={handleMouseEnterDetailLink.bind(
+                      null,
+                      character.id,
+                    )}
+                  >
+                    {character.name}
+                  </a>
                 </Link>
               </TableCell>
               <TableCell className='w-1/5'>
@@ -71,7 +85,7 @@ const Home = () => {
             </tr>
           ))}
         </tbody>
-        <tfoot className='bg-gray-200'>
+        <tfoot className='bg-gray-300'>
           <tr>
             <TableCell className='align-top'>Pages:</TableCell>
             <TableCell colSpan={2}>
@@ -81,9 +95,12 @@ const Home = () => {
                     <Link href={`/?page=${index + 1}`}>
                       <a
                         className={`p-2 ${
-                          page === index + 1 ? "bg-gray-300 rounded" : ""
+                          page === index + 1 ? "bg-gray-400 rounded" : ""
                         }`}
-                        onMouseEnter={handleMouseEnter.bind(null, index + 1)}
+                        onMouseEnter={handleMouseEnterPageLink.bind(
+                          null,
+                          index + 1,
+                        )}
                       >{`${index + 1}`}</a>
                     </Link>
                   </li>
@@ -92,7 +109,7 @@ const Home = () => {
             </TableCell>
           </tr>
         </tfoot>
-      </Table>
+      </table>
 
       {/* PAGE NAVIGATION */}
     </div>
