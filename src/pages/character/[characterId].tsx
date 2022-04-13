@@ -3,7 +3,7 @@ import { useCharacterDetails } from "@/hooks/useCharacterDetails";
 import { useFilmMap } from "@/hooks/useFilmMap";
 import { GenderSign } from "@/src/components/GenderSign";
 import { useRouter } from "next/router";
-
+import { BiChevronLeft } from "react-icons/bi";
 const CharacterDetails = () => {
   const router = useRouter();
   const characterId = parseInt(router.query.characterId as string) || null;
@@ -26,31 +26,74 @@ const CharacterDetails = () => {
   if (characterDetailsIsLoading || filmListIsLoading) {
     return <Loading />;
   }
-
   return (
-    <div className='container mx-auto py-20'>
-      <h1>{characterDetails?.name}</h1>
-      <p>{<GenderSign gender={characterDetails?.gender} />}</p>
-      <p>{characterDetails?.birthYear}</p>
-      <p>{characterDetails?.hairColor}</p>
-      {filmMap && (
-        <>
-          <p className=''>Films</p>
-          <ul className='gap-6'>
-            {characterDetails?.films.map((film) => {
-              const filmDetails = filmMap[film];
-              return (
-                <li className='py-6 flex gap-3' key={film}>
-                  <div>{filmDetails.episodeId}</div>
-                  <div>{filmDetails.title}</div>
-                  <div>{filmDetails.director}</div>
-                  <div>{filmDetails.openingCrawl}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+    <div className='container mx-auto'>
+      <div className='shadow-lg overflow-hidden sm:rounded-md'>
+        <div className='px-4 py-6 sm:px-6 bg-gray-700 flex gap-6 items-center'>
+          <div className='absolute h-10 w-10 flex justify-center items-center rounded-full bg-gray-800 hover:cursor-pointer'>
+            <BiChevronLeft
+              className='text-2xl font-medium'
+              onClick={() => router.back()}
+            />
+          </div>
+          <h1 className='ml-14 text-lg leading-6 font-medium  text-gray-50'>
+            {characterDetails?.name}
+          </h1>
+        </div>
+        <div className='bg-gray-50  border-t border-gray-200 px-4 py-6 sm:p-0'>
+          <dl className='sm:divide-y sm:divide-gray-200'>
+            <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+              <dt className='font-medium text-gray-900'>Gender</dt>
+              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2 flex items-baseline gap-6'>
+                {<GenderSign gender={characterDetails?.gender} />}
+                <span className='font-light italic'>
+                  {characterDetails?.gender}
+                </span>
+              </dd>
+            </div>
+            <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+              <dt className='font-medium text-gray-900'>Birth Year</dt>
+              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2'>
+                {characterDetails?.birthYear}
+              </dd>
+            </div>
+            <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+              <dt className='font-medium text-gray-900'>Hair color:</dt>
+              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2'>
+                {characterDetails?.hairColor}
+              </dd>
+            </div>
+            <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+              <dt className='font-medium text-gray-900'>Films</dt>
+              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2'>
+                <ul
+                  role='list'
+                  className='border border-gray-200 rounded-md divide-y divide-gray-200'
+                >
+                  {filmMap &&
+                    characterDetails?.films.map((film) => {
+                      const filmDetails = filmMap[film];
+                      return (
+                        <li
+                          className='pl-3 pr-4 py-6 flex flex-col gap-4 text-sm'
+                          key={film}
+                        >
+                          <div className='font-bold'>
+                            Episode {filmDetails?.episodeId} -{" "}
+                            {filmDetails?.title}
+                          </div>
+                          <div>Director: {filmDetails?.director}</div>
+                          <div>{filmDetails?.openingCrawl}</div>
+                        </li>
+                      );
+                    })}
+                  {}
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
     </div>
   );
 };

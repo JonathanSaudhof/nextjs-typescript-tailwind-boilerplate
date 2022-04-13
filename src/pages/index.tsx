@@ -6,6 +6,8 @@ import { prefetchCharacterList } from "@/hooks/useCharacterList";
 import { useFilmMap } from "@/src/hooks/useFilmMap";
 import { Loading } from "@/components/Loading";
 import { GenderSign } from "../components/GenderSign";
+import { Table } from "../components/Table/Table";
+import { TableCell } from "../components/Table/TableCell";
 
 const Home = () => {
   const router = useRouter();
@@ -43,56 +45,56 @@ const Home = () => {
   return (
     <div className='container mx-auto'>
       {/* LIST */}
-      <ul className='flex flex-col gap-6 py-20'>
-        {characterList.length > 0 &&
-          characterList.map((character) => (
-            <li
-              key={character.url}
-              className='flex flex-col shadow-md bg-gray-500 border rounded p-6'
-            >
-              <Link href={`/character/${character.id}`}>
-                <a>{character.name}</a>
-              </Link>
-              <div>{<GenderSign gender={character.gender} />}</div>
-              <div>{character.url}</div>
-              {filmMap && (
-                <div>
-                  {character.films
-                    .sort(
-                      (a, b) => +filmMap[a].episodeId - +filmMap[b].episodeId,
-                    )
-                    .map((filmId: number) => {
-                      const filmDetails = filmMap[filmId];
-                      return (
-                        <p
-                          key={filmDetails.title}
-                        >{`${filmDetails.episodeId}-${filmDetails.title}`}</p>
-                      );
-                    })}
-                </div>
-              )}
-            </li>
+      <Table>
+        <thead className='bg-gray-700 text-left'>
+          <tr>
+            <TableCell asHead>Name</TableCell>
+            <TableCell asHead>Gender</TableCell>
+            <TableCell asHead>Episodes</TableCell>
+          </tr>
+        </thead>
+        <tbody className='divide-y divide-gray-200 bg-gray-50'>
+          {characterList.map((character) => (
+            <tr key={character.id} className='py-4'>
+              <TableCell className='w-1/5 underline'>
+                <Link href={`/character/${character.id}`}>
+                  <a>{character.name}</a>
+                </Link>
+              </TableCell>
+              <TableCell className='w-1/5'>
+                <GenderSign gender={character.gender} />
+              </TableCell>
+              <TableCell className='w-auto'>
+                {filmMap &&
+                  character.films.map((id) => filmMap[id].episodeId).join(", ")}
+              </TableCell>
+            </tr>
           ))}
-      </ul>
+        </tbody>
+        <tfoot className='bg-gray-200'>
+          <tr>
+            <TableCell className='align-top'>Pages:</TableCell>
+            <TableCell colSpan={2}>
+              <ul className='flex flex-wrap gap-6 w-full py-1'>
+                {Array.apply(null, Array(pages)).map((_, index) => (
+                  <li key={index}>
+                    <Link href={`/?page=${index + 1}`}>
+                      <a
+                        className={`p-2 ${
+                          page === index + 1 ? "bg-gray-300 rounded" : ""
+                        }`}
+                        onMouseEnter={handleMouseEnter.bind(null, index + 1)}
+                      >{`${index + 1}`}</a>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </TableCell>
+          </tr>
+        </tfoot>
+      </Table>
 
       {/* PAGE NAVIGATION */}
-      {pages && (
-        <ul className='fixed bottom-0 flex gap-6 py-6 bg-gray-800 w-full'>
-          Pages
-          {Array.apply(null, Array(pages)).map((_, index) => (
-            <li key={index} className='text-white'>
-              <Link href={`/?page=${index + 1}`}>
-                <a
-                  className={`p-2 ${
-                    page === index + 1 ? "text-white bg-gray-300" : ""
-                  }`}
-                  onMouseEnter={handleMouseEnter.bind(null, index + 1)}
-                >{`${index + 1}`}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };
