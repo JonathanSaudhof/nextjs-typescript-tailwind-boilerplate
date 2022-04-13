@@ -5,6 +5,7 @@ import { useCharacterList } from "@/hooks/useCharacterList";
 import { prefetchCharacterList } from "@/hooks/useCharacterList";
 import { useFilmMap } from "@/src/hooks/useFilmMap";
 import { Loading } from "@/components/Loading";
+import { GenderSign } from "../components/GenderSign";
 
 const Home = () => {
   const router = useRouter();
@@ -47,17 +48,19 @@ const Home = () => {
           characterList.map((character) => (
             <li
               key={character.url}
-              className='flex flex-col shadow-md bg-gray-500 border rounded'
+              className='flex flex-col shadow-md bg-gray-500 border rounded p-6'
             >
               <Link href={`/character/${character.id}`}>
                 <a>{character.name}</a>
               </Link>
-              <div>{character.gender}</div>
+              <div>{<GenderSign gender={character.gender} />}</div>
               <div>{character.url}</div>
               {filmMap && (
                 <div>
                   {character.films
-                    .sort((a, b) => a - b)
+                    .sort(
+                      (a, b) => +filmMap[a].episodeId - +filmMap[b].episodeId,
+                    )
                     .map((filmId: number) => {
                       const filmDetails = filmMap[filmId];
                       return (

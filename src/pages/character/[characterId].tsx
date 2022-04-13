@@ -1,6 +1,7 @@
 import { Loading } from "@/components/Loading";
 import { useCharacterDetails } from "@/hooks/useCharacterDetails";
 import { useFilmMap } from "@/hooks/useFilmMap";
+import { GenderSign } from "@/src/components/GenderSign";
 import { useRouter } from "next/router";
 
 const CharacterDetails = () => {
@@ -29,7 +30,7 @@ const CharacterDetails = () => {
   return (
     <div className='container mx-auto py-20'>
       <h1>{characterDetails?.name}</h1>
-      <p>{characterDetails?.gender}</p>
+      <p>{<GenderSign gender={characterDetails?.gender} />}</p>
       <p>{characterDetails?.birthYear}</p>
       <p>{characterDetails?.hairColor}</p>
       {filmMap && (
