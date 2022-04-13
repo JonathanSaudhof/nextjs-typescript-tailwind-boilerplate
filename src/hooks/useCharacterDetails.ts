@@ -1,8 +1,27 @@
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
-import { CharacterRawDetails } from "./useCharacterList";
-import { extractIdFromUrl } from "@/lib/helper";
+
+import { extractIdFromUrl, prefetcher } from "@/lib/helper";
 import { CustomError } from "@/lib/customError";
+
+export interface CharacterRawDetails {
+  birth_year: string;
+  created: string;
+  edited: string;
+  eye_color: string;
+  films: string[];
+  gender: string;
+  hair_color: string;
+  height: string;
+  homeworld: string;
+  mass: string;
+  name: string;
+  skin_color: string;
+  species: string[];
+  starships: string[];
+  url: string;
+  vehicles: string[];
+}
 
 interface CharacterDetails {
   name: string;
@@ -57,4 +76,9 @@ export function useCharacterDetails(id: number | null): {
     isLoading: true,
     isError: error,
   };
+}
+
+export async function prefetchCharacterDetails(id: number) {
+  const url = `https://swapi.dev/api/people/?${id}`;
+  prefetcher(url);
 }

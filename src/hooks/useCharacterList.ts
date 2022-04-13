@@ -1,26 +1,9 @@
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 import { extractIdFromUrl, prefetcher } from "@/lib/helper";
-const ITEMS_PER_PAGE = 10;
+import { CharacterRawDetails } from "./useCharacterDetails";
 
-export interface CharacterRawDetails {
-  birth_year: string;
-  created: string;
-  edited: string;
-  eye_color: string;
-  films: string[];
-  gender: string;
-  hair_color: string;
-  height: string;
-  homeworld: string;
-  mass: string;
-  name: string;
-  skin_color: string;
-  species: string[];
-  starships: string[];
-  url: string;
-  vehicles: string[];
-}
+const ITEMS_PER_PAGE = 10;
 
 export type CharcerRawList = {
   count: number;
@@ -40,7 +23,6 @@ interface CharcterDetails {
   url: string;
 }
 
-// TODO: return type into interface
 export function useCharacterList(page: number): {
   characterList: CharcterDetails[] | [];
   pages: number | null;
