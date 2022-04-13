@@ -44,7 +44,7 @@ const CharacterDetails = () => {
           <dl className='sm:divide-y sm:divide-gray-400'>
             <div className='py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
               <dt className='font-medium text-gray-900'>Gender</dt>
-              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2 flex items-baseline gap-6'>
+              <dd className='mt-1 text-gray-900 sm:mt-0 sm:col-span-2 flex items-center gap-6'>
                 {<GenderSign gender={characterDetails?.gender} />}
                 <span className='font-light italic'>
                   {characterDetails?.gender}

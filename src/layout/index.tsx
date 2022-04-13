@@ -11,7 +11,7 @@ const Layout: React.FC = ({ children }) => {
         <title>Star Wars Characters</title>
         <link rel='shortcut icon' href='./stromtrooper.png' />
       </Head>
-      <header className='fixed w-full top-0 bg-gray-800 text-gray-200 shadow-lg'>
+      <header className='fixed w-full top-0 bg-gray-800  shadow-lg'>
         <div className='container mx-auto w-auto py-6 '>
           <Link href='/'>
             <a className='flex gap-6 items-center'>
@@ -22,7 +22,7 @@ const Layout: React.FC = ({ children }) => {
                 width={50}
                 className='shadow-sm'
               />
-              <h1 className='text-2xl italic font-bold'>
+              <h1 className='text-4xl font-black  text-shadow-star-wars text-gray-800'>
                 STAR WARS CHARACTERS
               </h1>
             </a>
