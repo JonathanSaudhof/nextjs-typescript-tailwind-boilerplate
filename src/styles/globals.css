@@ -24,16 +24,14 @@
 }
 
 @layer utilities {
-  @variants responsive {
-    .text-shadow-star-wars {
-      text-shadow: 0 0 2px #fccf03, 0 0 5px #fff3ba;
-      animation-name: flicker;
-      animation-duration: 3s;
-      animation-fill-mode: forwards;
-      animation-direction: normal;
-      animation-iteration-count: 1;
-      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-      opacity: 0;
-    }
+  .text-shadow-star-wars {
+    text-shadow: 0 0 2px #fccf03, 0 0 5px #fff3ba;
+    animation-name: flicker;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    opacity: 0;
   }
 }
