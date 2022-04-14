@@ -85,6 +85,7 @@ const Home = () => {
             </tr>
           ))}
         </tbody>
+        {/* PAGE NAVIGATION */}
         <tfoot className='bg-gray-300'>
           <tr>
             <TableCell className='align-top'>Pages:</TableCell>
@@ -110,8 +111,6 @@ const Home = () => {
           </tr>
         </tfoot>
       </table>
-
-      {/* PAGE NAVIGATION */}
     </div>
   );
 };
