@@ -1,13 +1,14 @@
-# Star Wars Characters Site
+# NextJS 
 
-Fan page with all the characters of episode 1 until episode 6.
+A basic Boilerplate for a NextJS application to ramp up a new project.
+...
 
 ## Prerequisites
 
 ```bash
 # clone the repository
-git clone git@github.com:JonathanSaudhof/star-wars-page.git
-cd star-wards-page
+git clone git@github.com:JonathanSaudhof/nextjs-typescript-tailwind-boilerplate.git
+cd nextjs-typescript-tailwind-boilerplate
 
 # install dependencies
 npm i
@@ -33,7 +34,6 @@ npm run test
 npm run test:ci
 ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 ## Deploy
 
