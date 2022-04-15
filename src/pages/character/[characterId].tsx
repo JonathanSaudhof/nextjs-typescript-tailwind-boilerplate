@@ -1,6 +1,6 @@
 import { Loading } from "@/components/Loading";
 import { useCharacterDetails } from "@/hooks/useCharacterDetails";
-import { useFilmMap } from "@/hooks/useFilmMap";
+import { useFilmMap } from "@/src/hooks/useHooks";
 import { GenderSign } from "@/src/components/GenderSign";
 import { useRouter } from "next/router";
 import { BiChevronLeft } from "react-icons/bi";
