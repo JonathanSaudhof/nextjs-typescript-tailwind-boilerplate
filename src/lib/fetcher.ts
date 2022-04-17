@@ -3,7 +3,7 @@ import { mutate } from 'swr';
 
 /**
  * fetcher
- * @descriptio fetcher to use in swr
+ * @description fetcher to use in swr
  */
 export async function fetcher<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -24,7 +24,7 @@ export async function fetcher<T>(url: string): Promise<T> {
 
 /**
  * prefetcher
- * @descriptio fetcher to use in swr to prefetch
+ * @description fetcher to use in swr to prefetch
  */
 export function prefetcher(url: string) {
   mutate(url, fetcher(url), { revalidate: false });
